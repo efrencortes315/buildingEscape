@@ -15,7 +15,7 @@ class BUILDINGESCAPE_API UOpenDoor : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UOpenDoor();
-
+	bool isOpen = false;
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -34,7 +34,6 @@ private:
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* PressurePlate;
 
-	UPROPERTY(EditAnywhere)
-	AActor* ActorThatOoens; //pawn inherits from actor
+	AActor* ActorThatOpens;
 
 };
