@@ -19,19 +19,23 @@ void UOpenDoor::BeginPlay()
 	Super::BeginPlay();
 	
 	ActorThatOpens = GetWorld()->GetFirstPlayerController()->GetPawn();
+	owner = GetOwner();
 	// ...
 	
 }
 
 void UOpenDoor::OpenDoor()
 {
-	FString ownerName = GetOwner()->GetName();
-	AActor* owner = GetOwner();
 	FRotator oldRotation = owner->GetActorRotation();
 	auto newZed = oldRotation.Yaw + 70;
 	owner->SetActorRotation(FRotator(oldRotation.Pitch, newZed, oldRotation.Roll));
 }
-
+void UOpenDoor::CloseDoor()
+{
+	FRotator oldRotation = owner->GetActorRotation();
+	auto newZed = oldRotation.Yaw - 70;
+	owner->SetActorRotation(FRotator(oldRotation.Pitch, newZed, oldRotation.Roll));
+}
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -43,6 +47,19 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (PressurePlate->IsOverlappingActor(ActorThatOpens) && !isOpen) {
 		OpenDoor();
 		isOpen = true;
+		lastDoorOpenTime = GetWorld()->GetTimeSeconds();
+	}
+
+	//check if its time to close the door
+	if (isOpen && GetWorld()->GetTimeSeconds() - lastDoorOpenTime >= DoorCloseDelay) {
+		if (!PressurePlate->IsOverlappingActor(ActorThatOpens)) {
+			CloseDoor();
+			isOpen = false;
+		}
+		else {
+			lastDoorOpenTime = GetWorld()->GetTimeSeconds();
+		}
+		
 	}
 }
 
