@@ -39,8 +39,19 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 		OUT PlayerViewPointRot);	// it changes the variables passed to it, to the answer
 
 
-	UE_LOG(LogTemp, Warning, TEXT("Location: %s, Rotation: %s"), 
+	/*UE_LOG(LogTemp, Warning, TEXT("Location: %s, Rotation: %s"), 
 		*PlayerViewPointLoc.ToString(), *PlayerViewPointRot.ToString()
-		);
+		);*/
+	/*UE_LOG(LogTemp, Warning, TEXT("Rotation: %s"),
+		*PlayerViewPointRot.Vector().ToString()
+	);*/
+	//draw a red trace in the world to visualize
+	
+	FVector LineTraceEnd = PlayerViewPointLoc + PlayerViewPointRot.Vector() * reach;
+
+	DrawDebugLine(
+		GetWorld(),PlayerViewPointLoc,LineTraceEnd,FColor(255,0,0),false,0,0,10.f
+	);
+	
 }
 
