@@ -52,6 +52,22 @@ void UGrabber::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompone
 	DrawDebugLine(
 		GetWorld(),PlayerViewPointLoc,LineTraceEnd,FColor(255,0,0),false,0,0,10.f
 	);
+
+	//set up query parameters
+	FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
+
+	FHitResult Hit;
+	GetWorld()->LineTraceSingleByObjectType(
+		OUT Hit, PlayerViewPointLoc, LineTraceEnd,
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_PhysicsBody),
+		TraceParams
+	);
+	
+	AActor* actorName = Hit.GetActor();
+	if (actorName) {
+		UE_LOG(LogTemp, Warning, TEXT("Object within reach : %s"), *(actorName->GetName()));
+	}
+		
 	
 }
 
