@@ -26,5 +26,6 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float reach = 100.f;
-		
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
 };
